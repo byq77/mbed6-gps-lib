@@ -1,0 +1,9 @@
+{
+    "name": "gps-mbed",
+    "version": "0.1.0",
+    "description": "Mbed GPS library",
+    "keywords": "pio, gps, mbed6",
+    "build": {
+      "builder": "MbedLibBuilder"
+    }
+  }
