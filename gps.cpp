@@ -28,6 +28,7 @@ bool GPS::update()
             _state = InputState::LOOK_FOR_DOLLA;
             _mutex.unlock();
             return false;
+        case InputState::MESSAGE_READ:
         default:
             break;
     }
@@ -41,6 +42,7 @@ bool GPS::update()
                &alt, &geoid, &age_of_diff, &diff_ref_station, &checksum) >= 1)
     {
         _state = InputState::LOOK_FOR_DOLLA;
+        _data_read = 0;
         fix = static_cast<FixType>(fix_raw);
         if(fix == FixType::FIX_NOT_AVAILABLE)
         {
