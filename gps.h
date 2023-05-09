@@ -99,10 +99,18 @@ public:
      */
     bool update();
 
+    /**
+     * @brief Get the last succesfully parsed NEMA message
+     * 
+     * @return const char* 
+     */
+    const char * getLastMsg();
+
 private:
-    char _sentence_buffer[256];
+    char _sentence_buffer[256]{""};
     InputState _state{InputState::LOOK_FOR_DOLLA};
     size_t _data_read{0};
+    bool _message_in_buffer = false;
     bool _tx_irq_enabled = false;
     bool _rx_irq_enabled = false;
     bool _tx_enabled = true;

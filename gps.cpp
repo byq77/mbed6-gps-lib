@@ -42,6 +42,7 @@ bool GPS::update()
                &alt, &geoid, &age_of_diff, &diff_ref_station, &checksum) >= 1)
     {
         _state = InputState::LOOK_FOR_DOLLA;
+        _message_in_buffer = true;
         _data_read = 0;
         fix = static_cast<FixType>(fix_raw);
         if(fix == FixType::FIX_NOT_AVAILABLE)
@@ -102,9 +103,10 @@ void GPS::readSentence()
             case InputState::LOOK_FOR_DOLLA:
                 if (ch == '$')
                     _state = InputState::READING_MESSAGE;
+                    _message_in_buffer = false;
                 break;
             case InputState::READING_MESSAGE:
-                if(ch == '\r')
+                if(ch == '\r' || ch == '\n')
                 {
                     *ptr = 0;
                     _state = InputState::MESSAGE_READ;
@@ -131,6 +133,8 @@ void GPS::readSentence()
     }
     core_util_critical_section_exit();
 }
+
+const char * GPS::getLastMsg() { return _message_in_buffer ? _sentence_buffer : "";}
 
 /* These are all called from critical section
  * Attatch IRQ routines to the serial device.
